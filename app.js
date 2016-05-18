@@ -25,7 +25,11 @@
     rarity: 7,
     color: '#CCC',
     faces: 14,
-    images: [ ]
+    images: [
+      "images/gem-01.gif",
+      "images/gem-02.gif",
+      "images/gem-03.gif"
+    ]
   }, {
     name: 'Bloodstone',
     description: "Origin of the Bloodstone is unknown, hence its low value. It has a very high shine and 12 sides, however.",
@@ -35,9 +39,9 @@
     color: '#EEE',
     faces: 12,
     images: [
-      "images/gem-01.gif",
-      "images/gem-03.gif",
-      "images/gem-04.gif"
+      "images/gem-04.gif",
+      "images/gem-05.gif",
+      "images/gem-06.gif"
     ]
   }, {
     name: 'Zircon',
@@ -48,8 +52,8 @@
     color: '#000',
     faces: 6,
     images: [
-      "images/gem-06.gif",
       "images/gem-07.gif",
+      "images/gem-08.gif",
       "images/gem-09.gif"
     ]
   }];
