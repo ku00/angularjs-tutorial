@@ -5,12 +5,15 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
     <script type="text/javascript" src="angular.min.js"></script>
     <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="products.js"></script>
   </head>
+
   <body class="list-group" ng-controller="StoreController as store">
     <header>
       <h1 class="text-center">Flatlander Crafted Gems</h1>
       <h2 class="text-center">- an Angular store -</h2>
     </header>
+
     <div class="list-group">
       <div class="list-group-item" ng-repeat="product in store.products">
         <h3>{{product.name}} <em class="pull-right">{{product.price | currency}}</em></h3>
