@@ -1,4 +1,4 @@
-## なぜ Angular なのか
+## Why Angular?
 
 動的なサイトを作るのに Javascript を使う場合には Angular はいい選択である。
 
@@ -7,14 +7,14 @@
 - jQuery と相性がよい
 - テストが簡単
 
-## Angular を使ったレスポンシブなサイト
+## A "responsive" website using Angular
 
 1. URLリクエストをサーバに送る(Web Browser)
 2. ウェブページと Assets を返す(Web Server)
 3. ユーザがリンクをクリックすると、新しいリクエストを送る(Web Browser)
 4. JSONデータを返す(Web Server)
 
-## Angular JS とは何か
+## What's Angular JS?
 
 HTMLに双方向性を持たせるための、クライアントサイド Javascript フレームワークである。
 
@@ -24,7 +24,7 @@ Javascript のコードを実行したいとき、 HTML にそれをどう伝え
 
 ディレクティブ( Directive ) は HTML タグの目印である。 Angular に Javascript のコードの実行や参照することを伝える。
 
-js ファイルに呼ぶための関数名を定義して、 `ng-controller` で呼び出す。
+js ファイルに呼ぶための関数名を定義して、 ng-controller で呼び出す。
 
 **index.html**
 
@@ -60,7 +60,7 @@ var app = angular.module('store', []);
 
 `store` がアプリケーション名であり、その後の `[]` に依存を書く。
 
-作ったモジュールを読み込むには `ng-app` を使う。
+作ったモジュールを読み込むには ng-app を使う。
 
 **index.html**
 
@@ -70,7 +70,7 @@ var app = angular.module('store', []);
 </html>
 ```
 
-## 語句
+## Expression
 
 HTML 内に動的な値を埋め込むことができる。
 
@@ -119,9 +119,9 @@ HTML 内に動的な値を埋め込むことができる。
 })();
 ```
 
-保存したデータを使うには `ng-controller` で呼び出すコントローラーを指定する必要がある。
+保存したデータを使うには ng-controller で呼び出すコントローラーを指定する必要がある。
 
-コントローラーの範囲は `ng-controller` を追加したタグの内側のみ。
+コントローラーの範囲は ng-controller を追加したタグの内側のみ。
 
 `as store` の部分はコントローラー名のエイリアスである。
 
@@ -135,17 +135,17 @@ HTML 内に動的な値を埋め込むことができる。
 </div>
 ```
 
-## いろんなディレクティブ
+## some Directives
 
-### ng-show と ng-hide
+### ng-show / ng-hide
 
-`ng-show` は与えられた値が true のときに要素を表示する。
+ng-show は与えられた値が true のときに要素を表示する。
 
 ```html
 <button ng-show="store.product.canPurchase"> Add to Cart </button>
 ```
 
-一方、 `ng-hide` は与えられた値が true のときに要素を非表示にする。
+一方、 ng-hide は与えられた値が true のときに要素を非表示にする。
 
 ```html
 <div ng-hide="store.prodcut.soldOut">
@@ -180,7 +180,7 @@ var gems = [
 ];
 ```
 
-配列に入ったデータをうまく利用するには `ng-repeat` を使うとよい。
+配列に入ったデータをうまく利用するには ng-repeat を使うとよい。
 
 **index.html**
 
@@ -205,7 +205,13 @@ img タグを使うときに src 属性に Angular の語句を使うことは�
 <img ng-src="{{product.images[0].full}}" />
 ```
 
-## filter
+### Other Directives
+
+- ng-click
+- ng-init
+- ng-class
+
+## Filter
 
 フィルターを使うことでフォーマットを揃えることができる。
 
@@ -219,3 +225,70 @@ img タグを使うときに src 属性に Angular の語句を使うことは�
 ```
 
 date, limitTo 以外にもいろいろある。
+
+## ng-model
+
+ng-model はフォームの要素の値を、属性に束縛する。
+
+```html
+<form name="reviewForm">
+  <select ng-model="review.stars">
+    <option value="1">1 star</option>
+    <option value="2">2 star</option>
+  </select>
+  <textarea ng-model="review.author"></textarea>
+</form>
+```
+
+上のコードの select なら、 review.stars の値は 1 か 2 になる。
+
+textarea なら、 入力された文字がそのまま review.author の値になる。
+
+## Validations
+
+Angular は、ディレクティブを使うことで、いくつかのすごいクライアントサイドのバリデーションを作り出す。
+
+```html
+<form ... ng-submit="reviewCtrl.addReview(product)" novalidate>
+  <select ng-model="reviewCtrl.review.stars" required>
+    <option value="1">1 star</option>
+    ...
+  </select>
+  <input ng-model="reviewCtrl.review.author" type="email" required />
+
+  <div> reviewForm is {{reviewForm.$valid}} </div>
+</form>
+```
+
+novalidate を指定すると、デフォルトで有効になっているHTMLのバリデーションを無効にする。
+
+required をつけると、そのフィールド値が必須になる。
+
+.$valid でバリデーションの結果を出力できる。
+
+### The Input Classes
+
+```html
+<input ng-model="reviewCtrl.review.author" type="email" required />
+```
+
+上記のような required が付いている ipnut タグがあるとき、バリデーションの結果によってさまざまな class が付与される。
+
+```html
+<!-- before typing email -->
+<input class="ng-pristine ng-invalid">
+
+<!-- after typing, with invalid -->
+<input class="ng-dirty ng-invalid">
+
+<!-- after typing, with valid -->
+<input class="ng-dirty ng-valid">
+
+```
+
+email 以外にも HTML5 の type を基にしたバリデーションが、 Angular には用意されている。
+
+- url
+- number
+
+etc...
