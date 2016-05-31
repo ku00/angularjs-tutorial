@@ -70,7 +70,7 @@ var app = angular.module('store', []);
 </html>
 ```
 
-## Expressions
+## 語句
 
 HTML 内に動的な値を埋め込むことができる。
 
@@ -130,7 +130,92 @@ HTML 内に動的な値を埋め込むことができる。
 ```html
 <div ng-controller="StoreController as store">
   <h1> {{store.product.name}} </h1>
-  <h2> {{store.product.price}} </h2>
+  <h2> ${{store.product.price}} </h2>
   <p> {{store.product.description}} </p>
 </div>
 ```
+
+## いろんなディレクティブ
+
+### ng-show と ng-hide
+
+`ng-show` は与えられた値が true のときに要素を表示する。
+
+```html
+<button ng-show="store.product.canPurchase"> Add to Cart </button>
+```
+
+一方、 `ng-hide` は与えられた値が true のときに要素を非表示にする。
+
+```html
+<div ng-hide="store.prodcut.soldOut">
+  <h1> {{store.product.name}} </h1>
+  ...
+</div>
+```
+
+### ng-repeat
+
+先ほどの gem を複数個扱うためには配列を使えばよい。
+
+**app.js**
+
+```javascript
+app.controller('StoreController', function(){
+  this.products = gems;
+});
+
+var gems = [
+  {
+    name: 'neko-01',
+    price: 301.95,
+    description: '. . .',
+  },
+  {
+    name: 'neko-02',
+    price: 202.01,
+    description: '. . .',
+  },
+  ...
+];
+```
+
+配列に入ったデータをうまく利用するには `ng-repeat` を使うとよい。
+
+**index.html**
+
+```html
+<div ng-repeat="product in store.products">
+  <h1> {{product.name}} </h1>
+  <h2> ${{product.price}} </h2>
+  <p> {{product.description}} </p>
+  <button ng-show="product.canPurchase"> Add to Cart </button>
+</div>
+```
+
+### ng-src
+
+img タグを使うときに src 属性に Angular の語句を使うことはできない。語句を評価する前に画像を読み込み始めてしまうためである。
+
+```html
+<!-- NG -->
+<img src="{{product.images[0].full}}" />
+
+<!-- OK -->
+<img ng-src="{{product.images[0].full}}" />
+```
+
+## filter
+
+フィルターを使うことでフォーマットを揃えることができる。
+
+```html
+<!-- date -->
+{{'1388123412323' | date:'MM/dd/yyyy @ h:mma'}}   <!-- => 12/27/2013 @ 12:50AM -->
+
+
+<!-- limitTo -->
+{{ 'My description' | limitTo:8 }}   <!-- => My descr -->
+```
+
+date, limitTo 以外にもいろいろある。
