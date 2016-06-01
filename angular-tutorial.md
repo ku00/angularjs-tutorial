@@ -292,3 +292,24 @@ email 以外にも HTML5 の type を基にしたバリデーションが、 Ang
 - number
 
 etc...
+
+## ng-include
+
+HTML コードの一部を切り出したい場合は、 ng-include を使うといい。
+
+まず、切り出したいコードを書く。
+
+**product-title.html**
+
+```html
+{{product.name}}
+<em class="pull-right">${{product.price}}</em>
+```
+
+ng-include に切り出したファイル名を指定する。
+
+**index.html**
+
+```html
+<h3 ng-include="'product-title.html'"></h3>
+```
