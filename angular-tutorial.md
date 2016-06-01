@@ -313,3 +313,124 @@ ng-include に切り出したファイル名を指定する。
 ```html
 <h3 ng-include="'product-title.html'"></h3>
 ```
+
+## Custom Directive
+
+先ほど ng-include を使って作ったものをディレクティブとして定義してみる。
+
+カスタムディレクティブは、
+
+- 拡張または置換されたタグや属性を定義する
+- 必要であれば、コントローラーのロジックを含めることもできる
+
+次のように書くことで、ディレクティブを定義するできる。
+
+**index.html**
+
+```html
+<product-title></product-title>
+```
+
+**app.js**
+
+```javascript
+app.directive('productTitle', function(){
+  return {
+    restrict: 'E',
+    templateUrl: 'product-title.html'
+  };
+});
+```
+
+### Attribute vs Element Directives
+
+要素のディレクティブは、 `/>` で閉じることができない。さらにいくつかのブラウザには `/>` に対応していないものがある。
+
+```html
+<!-- NG -->
+<product-title/>
+```
+
+属性のディレクティブなら、振る舞いを組み合わせるために、UI部品と一緒に使うことができる。
+
+```html
+<h3 product-title></h3>
+```
+
+次のように書くことで、属性のディレクティブを定義することができる。
+
+**index.html**
+
+```html
+<h3 product-title></h3>
+```
+
+**app.js**
+
+```javascript
+app.directive('productTitle', function(){
+  return {
+    restrict: 'A',
+    templateUrl: 'product-title.html'
+  };
+});
+```
+
+このように、ディレクティブはよりよいHTMLを書く手助けをしてくれる。
+
+あなたが動的なWebアプリケーションを考えるときに、HTMLを見ただけでその機能性を理解することができますか。できないですよね。
+
+でも、AngularJS アプリケーションを書いているときには、HTMLからその振る舞いと目的を理解できるべきです。そして表現的なHTMLを書くためにカスタムディレクティブを使うでしょう。
+
+### Moving the Controller Inside
+
+次のようなコントローラーとディレクティブがあったとする。
+
+**index.html**
+
+```html
+<product-panels ng-controller="PanelController as panels">
+  ...
+</product-panels>
+```
+
+**app.js**
+
+```javascript
+app.directive('productPanels', function(){
+  return {
+    restrict: 'E',
+    templateUrl: 'product-panels.html'
+  };
+});
+app.controller('PanelController', function(){
+  ...
+});
+```
+
+このとき、コントローラーをディレクティブに含めることができる。
+
+次のように書く。
+
+**index.html**
+
+```html
+<product-panels>
+  ...
+</product-panels>
+```
+
+**app.js**
+
+```javascript
+app.directive('productPanels', function(){
+  return {
+    restrict: 'E',
+    templateUrl: 'product-panels.html',
+    controller: function(){
+      ...
+    },
+    controllerAs: 'panels'
+  };
+});
+```
