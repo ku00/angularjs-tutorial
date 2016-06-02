@@ -434,3 +434,63 @@ app.directive('productPanels', function(){
   };
 });
 ```
+
+## Add dependencies
+
+次のコードのようにまとまりそうな複数のディレクティブが存在するとき、これらをリファクタリングするにはモジュールの依存性を利用するとよい。
+
+**app.js**
+
+```javascript
+(function(){
+  var app = angular.module('store', []);
+  app.controller('StoreController', function(){...});
+
+  app.directive('productTitle', function(){...});
+  app.directive('productGallery', function(){...});
+  app.directive('productPanels', function(){...});
+
+  ...
+});
+```
+
+まず product.js のような別ファイルを作成して、 app.js とは異なるモジュール store-products を定義する。
+
+そして、そこにディレクティブをまとめて移す。
+
+**product.js**
+
+```javascript
+(function(){
+  var app = angular.module('store-products', []);
+
+  app.directive('productTitle', function(){...});
+  app.directive('productGallery', function(){...});
+  app.directive('productPanels', function(){...});
+});
+```
+
+次に store モジュールの2つ目の引数に、先ほど作成した store-products モジュールを追加する。
+
+**app.js**
+
+```javascript
+(function(){
+  var app = angular.module('store', ['store-products']);
+  app.controller('StoreController', function(){...});
+  ...
+});
+```
+
+最後にhtmlファイルから products.js を読み込むのを忘れないように。
+
+**index.html**
+
+```html
+<body ng-controller="StoreController as store">
+  ...
+  <script src="angular.js"></script>
+  <script src="app.js"></script>
+  <script src="products.js"></script>  
+</body>
+```
