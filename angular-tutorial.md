@@ -85,7 +85,7 @@ HTML 内に動的な値を埋め込むことができる。
 
 ## Controllers
 
-コントローラー( Controller )は、関数と値の定義によってアプリの振る舞いを定義する。
+コントローラ( Controller )は、関数と値の定義によってアプリの振る舞いを定義する。
 
 **app.js**
 
@@ -99,7 +99,7 @@ HTML 内に動的な値を埋め込むことができる。
 })();
 ```
 
-コントローラー内にデータを保存しておくには次のように書くとよい。
+コントローラ内にデータを保存しておくには次のように書くとよい。
 
 **app.js**
 
@@ -119,11 +119,11 @@ HTML 内に動的な値を埋め込むことができる。
 })();
 ```
 
-保存したデータを使うには ng-controller で呼び出すコントローラーを指定する必要がある。
+保存したデータを使うには ng-controller で呼び出すコントローラを指定する必要がある。
 
-コントローラーの範囲は ng-controller を追加したタグの内側のみ。
+コントローラの範囲は ng-controller を追加したタグの内側のみ。
 
-`as store` の部分はコントローラー名のエイリアスである。
+`as store` の部分はコントローラ名のエイリアスである。
 
 **index.html**
 
@@ -321,7 +321,7 @@ ng-include に切り出したファイル名を指定する。
 カスタムディレクティブは、
 
 - 拡張または置換されたタグや属性を定義する
-- 必要であれば、コントローラーのロジックを含めることもできる
+- 必要であれば、コントローラのロジックを含めることもできる
 
 次のように書くことで、ディレクティブを定義するできる。
 
@@ -384,7 +384,7 @@ app.directive('productTitle', function(){
 
 ### Moving the Controller Inside
 
-次のようなコントローラーとディレクティブがあったとする。
+次のようなコントローラとディレクティブがあったとする。
 
 **index.html**
 
@@ -408,7 +408,7 @@ app.controller('PanelController', function(){
 });
 ```
 
-このとき、コントローラーをディレクティブに含めることができる。
+このとき、コントローラをディレクティブに含めることができる。
 
 次のように書く。
 
@@ -494,3 +494,50 @@ app.directive('productPanels', function(){
   <script src="products.js"></script>  
 </body>
 ```
+
+## Service
+
+次のコードの this.products に格納されるデータを、直書きするのではなく、APIから取得するようにしたい。
+
+```javascript
+(function(){
+  var app = angular.module('store', ['store-products']);
+
+  app.controller('StoreController', function(){
+    this.products = [
+      { name: '...', price: 1.99, ...},
+      { name: '...', price: 1.99, ...},
+      { name: '...', price: 1.99, ...},
+      ...
+    ];
+  });
+});
+```
+
+こんなときはサービス( Service )を使うとよい。サービスにはコントローラに追加の機能を与える。
+
+例えば、
+
+  - WebサービスからJSONデータを取得する $http
+  - Javascriptコンソールにメッセージをロギングする $log
+  - 配列をフィルタリングする $filter
+
+などがある。
+
+今回の問題は $http を使えば解決できる。
+
+### $http
+
+オプションのオブジェクトを含んだ関数として使う場合は、次のように書く。
+
+```javascript
+$http({ method: 'GET', url: '/products.json'});
+```
+
+またはショートカットメソッドを使って次のように書くこともできる。
+
+```javascript
+$http.get('products.json', { apiKey: 'myApiKey' });
+```
+
+これらは .success() と .error() を含んだ Promise オブジェクトを返す。
