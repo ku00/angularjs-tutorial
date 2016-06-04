@@ -541,3 +541,63 @@ $http.get('products.json', { apiKey: 'myApiKey' });
 ```
 
 これらは .success() と .error() を含んだ Promise オブジェクトを返す。
+
+$http でJSONを取得した場合は、その結果を自動的に Javascript オブジェクトと配列にデコードする。
+
+### How does a Controller use a Service
+
+サービスを使うには、次のように定義する。
+
+```javascript
+app.controller('SomeController', ['$http', '$log', function($http, $log){
+  ...
+}]);
+```
+
+サービスは、コントローラが実行されるときに依存するものとして一緒に読み込まれる。
+
+### Let's use our Service
+
+はじめの問題に戻ってみる。
+
+> 次のコードの this.products に格納されるデータを、直書きするのではなく、APIから取得するようにしたい。
+
+```javascript
+(function(){
+  var app = angular.module('store', ['store-products']);
+
+  app.controller('StoreController', function(){
+    this.products = [
+      { name: '...', price: 1.99, ...},
+      { name: '...', price: 1.99, ...},
+      { name: '...', price: 1.99, ...},
+      ...
+    ];
+  });
+});
+```
+
+$http を使って次のように書き直せる。
+
+```javascript
+(function(){
+  var app = angular.module('store', ['store-products']);
+
+  app.controller('StoreController', ['$http', function($http){
+    var store = this;
+    store.products = [];
+
+    $http.get('/products.json').success(function(data){
+      store.products = data;
+    });
+  }]);
+});
+```
+
+$http は get() 関数以外にも post(), put(), delete() などがある。
+
+```javascript
+$http.post('/path/to/resource.json', { param: 'value' });
+
+$http.delete('/path/to/resource.json');
+```
